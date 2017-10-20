@@ -1,6 +1,6 @@
 applications:
 -services:
-  - ElephantSQL-3n
+  - ElephantSQL-h8
   - disk_quota: 1024M
     host: itucsdb1719
     name: itucsdb1719
