@@ -2,11 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Home</title>
+    <title>Giris Sayfasi</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
-  <h1>Welcome To HastApp</h1>
+  <h1> HastApp Hosgeldiniz!</h1>
+  <h2>Giris </h2>
+  <form action="{{url_for('login')}}" method=post>
+  <dl>
+  	<dt>Kullanıcı ismi:
+  	<dd><input type=text name=kullanici ismi>
+  	<dt>Sifre:
+  	<dd><input type=text name=sifre>
+  	<dd><input type=submit value=Giris>
+  </dl>
+  </form>
     <footer>
       <div id="datetime">{{ current_time }}</div>
     </footer>

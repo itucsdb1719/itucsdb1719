@@ -27,6 +27,22 @@ def home_page():
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != app.config['PASSWORD']:
+            error = 'Invalid password'
+        else:
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('show_entries'))
+    return render_template('login.html', error=error)
+
+
+
 @app.route('/initdb')
 def initialize_database():
         with dbapi2.connect(app.config['dsn']) as connection:
@@ -40,6 +56,10 @@ def initialize_database():
 
             query="""INSERT INTO COUNTER (N) VALUES (0)"""
             cursor.execute(query)
+
+            query=""" CREATE TABLE USER (ID INTEGER PRIMARY KEY, PASSWORD INTEGER , TYPE VARCHAR(10) NOT NULL)"""
+            cursor.execute(query)
+
             connection.commit()
         return redirect(url_for('home_page'))
 
@@ -70,3 +90,5 @@ if __name__ == '__main__':
         app.config['dsn'] = """user='vagrant' password='vagrant'
                                host='itucsdb1719.mybluemix.net' port=5432 dbname='itucsdb'"""
     app.run(host='0.0.0.0', port=port, debug=debug)
+
+
