@@ -1,6 +1,6 @@
 body {
-  background-color: white;
-  color: #6F6F6F;
+  background-color: LightSkyBlue ;
+  color: #00FF7F;
   font-family: 'Droid Sans', 'Helvetica', 'sans';
   font-size: 12pt;
   margin: 2ex 2em;
@@ -11,7 +11,7 @@ h1, h2, h3, h4 {
 }
 
 a {
-  color: #6F6F6F;
+  color: #00FF7F;
   text-decoration: underline;
 }
 

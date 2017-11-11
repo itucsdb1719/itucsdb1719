@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Üye Formu</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='Signedup.css') }}" />
+</head>
+<body>
+ <form action="{{url_for('Signedup')}}" method=post>
+   Name:<br>
+  <input type="text" name="Name">
+  <br>
+   Surname:<br>
+  <input type="text" name="Surname">
+  <br><br>
+   Kullanıcı numarası giriniz:<br>
+  <input type="text" name="Kullanıcı numarası">
+  <br>
+   Parola giriniz:<br>
+  <input type="password" name="Parola">
+  <br>
+  	T.C:<br>
+  <input type="text" name="T.C">
+  <br>
+   Telefon numarası(+90):<br>
+  <input type="text" name="Name">
+  <br>
+  <input type="submit" value="Kaydol">
+
+ </form>
+
+</body>
+</html>

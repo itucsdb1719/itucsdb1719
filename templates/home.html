@@ -11,14 +11,14 @@
   <form action="{{url_for('login')}}" method=post>
   <dl>
   	<dt>Kullanıcı ismi:
-  	<dd><input type=text name=kullanici ismi>
+  	<dd><input type=text name=kullanici_ismi>
   	<dt>Sifre:
   	<dd><input type=text name=sifre>
   	<dd><input type=submit value=Giris>
   </dl>
   </form>
-    <footer>
-      <div id="datetime">{{ current_time }}</div>
-    </footer>
+  <p> Üye değil misiniz?<br>
+    <a href="{{ url_for('Signedup') }}">Üye olmak için tıklayın!</a>
+  </p>
   </body>
 </html>

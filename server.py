@@ -8,7 +8,7 @@ from flask import Flask
 from flask import redirect
 from flask import render_template
 from flask.helpers import url_for
-
+from flask import request
 app = Flask(__name__)
 
 
@@ -153,6 +153,13 @@ def initialize_database():
 
         connection.commit()
         return redirect(url_for('home_page'))
+@app.route('/Signedup',methods=['GET','POST'])
+def Signedup():
+    if request.method == 'POST' :
+        return redirect(url_for('home_page'))
+
+
+    return render_template('Signedup.html')
 
 @app.route('/count')
 def counter_page():
