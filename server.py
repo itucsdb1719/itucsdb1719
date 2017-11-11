@@ -155,21 +155,21 @@ def initialize_database():
 @app.route('/Signedup',methods=['GET','POST'])
 def Signedup():
     if request.method == 'POST' :
-        
+
         name = request.form['name']
         surname = request.form['surname']
         userid = request.form['userid']
         password = request.form['password']
         tc = request.form['T.C']
         telno = request.form['telno']
-        
+
         with dbapi2.connect(app.config['dsn']) as connection:
             cursor=connection.cursor()
-    
+
             query = """INSERT INTO "USER"(userid,password) VALUES (?,?,?,?)""", (userid,password)
             cursor.execute(query)
             connection.commit()
-        #return "name%s"% name             
+        #return "name%s"% name
         return redirect(url_for('home_page'))
 
 
@@ -202,7 +202,7 @@ if __name__ == '__main__':
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         app.config['dsn'] = """user='vagrant' password='vagrant'
-                               host='localhost' port=5432 dbname='itucsdb'"""
+                               host='itucsdb1719.mybluemix.net' port=5432 dbname='itucsdb'"""
 
     app.run(host='0.0.0.0', port=port, debug=debug)
 #itucsdb1719.mybluemix.net
