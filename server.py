@@ -156,11 +156,15 @@ def initialize_database():
 @app.route('/Signedup',methods=['GET','POST'])
 def Signedup():
     if request.method == 'POST' :
+
+
         return redirect(url_for('home_page'))
 
 
     return render_template('Signedup.html')
-
+@app.route('/Signin_as_adminstrator',methods=['GET','POST'])
+def Signin_as_adminstrator():
+    return render_template('Signin_as_adminstrator.html')
 @app.route('/count')
 def counter_page():
     with dbapi2.connect(app.config['dsn']) as connection:
