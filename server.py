@@ -9,6 +9,7 @@ from flask import redirect
 from flask import render_template
 from flask.helpers import url_for
 from flask import request
+from jinja2.runtime import to_string
 app = Flask(__name__)
 
 
@@ -167,8 +168,10 @@ def Signedup():
         with dbapi2.connect(app.config['dsn']) as connection:
             cursor=connection.cursor()
 
-            query = """INSERT INTO "USER"(userid,password) VALUES (?,?,?,?)""", (userid,password)
-            cursor.execute(query)
+            cursor.execute("""INSERT INTO "USER"(userid,password,TYPE) VALUES ("""+userid+""","""+password+""",1)""")
+            
+            cursor.execute('INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES ('+userid+','+name+','+tc+','+telno+')')
+                           
             connection.commit()
         #return "name%s"% name
         return redirect(url_for('home_page'))
