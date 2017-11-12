@@ -65,10 +65,11 @@ def initialize_database():
 
             query=""" CREATE TABLE HASTA(
             hasta_no INTEGER PRIMARY KEY,
-            isim VARCHAR,YAS INTEGER,
+            isim VARCHAR,
+            YAS INTEGER,
             tc VARCHAR NOT NULL,
             telefon VARCHAR,
-            FOREIGN KEY (hasta_no) REFERENCES "USER"(userid)
+            FOREIGN KEY (hasta_no) REFERENCES "USER"
             )"""
             cursor.execute(query)
 
@@ -77,7 +78,7 @@ def initialize_database():
             hastalik    VARCHAR,
             ilac_ad    VARCHAR,
 
-            PRIMARY KEY ( hasta_no,hastalik,ilac_ad)
+            PRIMARY KEY ( hasta_no,hastalik,ilac_ad),
             FOREIGN KEY (hasta_no) REFERENCES "USER" (userid)
             )"""
             cursor.execute(query)
@@ -88,7 +89,7 @@ def initialize_database():
             kisi_sayi INTEGER,
             hasta_no INTEGER,
 
-            PRIMARY KEY(oda_id,oda_kap,kisi_say),
+            PRIMARY KEY(oda_id,oda_kap,kisi_sayi),
             FOREIGN KEY (hasta_no) REFERENCES "USER" (userid)
             )"""
             cursor.execute (query)
@@ -202,7 +203,7 @@ if __name__ == '__main__':
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         app.config['dsn'] = """user='vagrant' password='vagrant'
-                               host='itucsdb1719.mybluemix.net' port=5432 dbname='itucsdb'"""
+                               host='localhost' port=5432 dbname='itucsdb'"""
 
     app.run(host='0.0.0.0', port=port, debug=debug)
 #itucsdb1719.mybluemix.net
