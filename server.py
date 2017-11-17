@@ -194,10 +194,15 @@ def Signedup():
         with dbapi2.connect(app.config['dsn']) as connection:
             cursor=connection.cursor()
 
+
             cursor.execute("""INSERT INTO USERD(userid,password,TYPE) VALUES ("""+userid+""","""+password+""",1)""")
 
             #cursor.execute("""INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES ("""+userid+""","""+name+""","""+tc+""","""+telno+""")""")
             cursor.execute("""INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES (%s,%s,%s,%s)""",(userid,name,tc,telno))
+
+            cursor.execute("""INSERT INTO "USER"(userid,password,TYPE) VALUES ("""+userid+""","""+password+""",1)""")
+
+            cursor.execute('INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES ('+userid+','+name+','+tc+','+telno+')')
 
 
             connection.commit()
