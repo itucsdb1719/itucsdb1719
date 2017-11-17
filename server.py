@@ -42,8 +42,6 @@ def login():
             return redirect(url_for('show_entries'))
     return render_template('login.html', error=error)
 
-
-
 @app.route('/initdb')
 def initialize_database():
         with dbapi2.connect(app.config['dsn']) as connection:
@@ -58,20 +56,29 @@ def initialize_database():
             query="""INSERT INTO COUNTER (N) VALUES (0)"""
             cursor.execute(query)
 
-            query="""CREATE TABLE "USER" (
+            query="""DROP TABLE IF EXISTS USERD"""
+            cursor.execute(query)
+
+            query="""CREATE TABLE USERD (
             userid INTEGER PRIMARY KEY,
             password INTEGER NOT NULL,
             TYPE VARCHAR(10) NOT NULL)"""
             cursor.execute(query)
 
+            query="""DROP TABLE IF EXISTS HASTA"""
+            cursor.execute(query)
+            
             query=""" CREATE TABLE HASTA(
             hasta_no INTEGER PRIMARY KEY,
-            isim VARCHAR,
+            isim VARCHAR(15),
             YAS INTEGER,
-            tc VARCHAR NOT NULL,
-            telefon VARCHAR,
-            FOREIGN KEY (hasta_no) REFERENCES "USER"
+            tc VARCHAR(11) NOT NULL,
+            telefon VARCHAR(12),
+            FOREIGN KEY (hasta_no) REFERENCES USERD
             )"""
+            cursor.execute(query)
+
+            query="""DROP TABLE IF EXISTS HASTALIK"""
             cursor.execute(query)
 
             query =""" CREATE  TABLE HASTALIK(
@@ -80,10 +87,13 @@ def initialize_database():
             ilac_ad    VARCHAR,
 
             PRIMARY KEY ( hasta_no,hastalik,ilac_ad),
-            FOREIGN KEY (hasta_no) REFERENCES "USER" (userid)
+            FOREIGN KEY (hasta_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
 
+            query="""DROP TABLE IF EXISTS ODA"""
+            cursor.execute(query)
+            
             query = """ CREATE TABLE ODA(
             oda_id INTEGER,
             oda_kap INTEGER,
@@ -91,10 +101,13 @@ def initialize_database():
             hasta_no INTEGER,
 
             PRIMARY KEY(oda_id,oda_kap,kisi_sayi),
-            FOREIGN KEY (hasta_no) REFERENCES "USER" (userid)
+            FOREIGN KEY (hasta_no) REFERENCES USERD (userid)
             )"""
             cursor.execute (query)
 
+            query="""DROP TABLE IF EXISTS DOKTOR"""
+            cursor.execute(query)
+            
             query = """ CREATE TABLE DOKTOR(
             doktor_ad VARCHAR,
             doktor_brans VARCHAR,
@@ -104,8 +117,11 @@ def initialize_database():
             doktor_no INTEGER,
 
             PRIMARY KEY(doktor_no),
-            FOREIGN KEY (doktor_no) REFERENCES "USER" (userid)
+            FOREIGN KEY (doktor_no) REFERENCES USERD (userid)
             )"""
+            cursor.execute(query)
+            
+            query="""DROP TABLE IF EXISTS RANDEVU"""
             cursor.execute(query)
 
             query = """ CREATE TABLE RANDEVU(
@@ -116,8 +132,11 @@ def initialize_database():
             brans VARCHAR,
 
             PRIMARY KEY(hasta_no,doktor_no),
-            FOREIGN KEY (doktor_no) REFERENCES "USER" (userid)
+            FOREIGN KEY (doktor_no) REFERENCES USERD (userid)
             )"""
+            cursor.execute(query)
+            
+            query="""DROP TABLE IF EXISTS AMELIYATHANE"""
             cursor.execute(query)
 
             query = """ CREATE TABLE AMELIYATHANE(
@@ -127,8 +146,11 @@ def initialize_database():
             tarih DATE,
 
             PRIMARY KEY(hasta_no),
-            FOREIGN KEY(hasta_no) REFERENCES "USER" (userid)
+            FOREIGN KEY(hasta_no) REFERENCES USERD (userid)
             )"""
+            cursor.execute(query)
+            
+            query="""DROP TABLE IF EXISTS TAHLIL"""
             cursor.execute(query)
 
             query = """ CREATE TABLE TAHLIL(
@@ -137,8 +159,11 @@ def initialize_database():
             sonuc_kan VARCHAR,
 
             PRIMARY KEY(hasta_no),
-            FOREIGN KEY(hasta_no) REFERENCES "USER" (userid)
+            FOREIGN KEY(hasta_no) REFERENCES USERD (userid)
             )"""
+            cursor.execute(query)
+            
+            query="""DROP TABLE IF EXISTS HEMSIRE"""
             cursor.execute(query)
 
             query = """ CREATE TABLE HEMSIRE(
@@ -148,7 +173,7 @@ def initialize_database():
             hemsire_no INTEGER,
 
             PRIMARY KEY(hemsire_no),
-            FOREIGN KEY(hemsire_no) REFERENCES "USER"(userid)
+            FOREIGN KEY(hemsire_no) REFERENCES USERD(userid)
             )"""
             cursor.execute(query)
 
@@ -158,19 +183,21 @@ def initialize_database():
 def Signedup():
     if request.method == 'POST' :
 
-        name = request.form['name']
-        surname = request.form['surname']
-        userid = request.form['userid']
-        password = request.form['password']
-        tc = request.form['T.C']
-        telno = request.form['telno']
+        name = request.form["name"]
+        surname = request.form["surname"]
+        userid = request.form["userid"]
+        password = request.form["password"]
+        tc = request.form["T.C"]
+        telno = request.form["telno"]
 
         with dbapi2.connect(app.config['dsn']) as connection:
             cursor=connection.cursor()
 
-            cursor.execute("""INSERT INTO "USER"(userid,password,TYPE) VALUES ("""+userid+""","""+password+""",1)""")
+            cursor.execute("""INSERT INTO USERD(userid,password,TYPE) VALUES ("""+userid+""","""+password+""",1)""")
             
-            cursor.execute('INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES ('+userid+','+name+','+tc+','+telno+')')
+            #cursor.execute("""INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES ("""+userid+""","""+name+""","""+tc+""","""+telno+""")""")
+            cursor.execute("""INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES (%s,%s,%s,%s)""",(userid,name,tc,telno))
+   
                            
             connection.commit()
         #return "name%s"% name
@@ -189,7 +216,7 @@ def counter_page():
         query = "UPDATE COUNTER SET N = N + 1"
         cursor.execute(query)
         connection.commit()
-
+        
         query= "SELECT N FROM COUNTER"
         cursor.execute(query)
         count = cursor.fetchone()[0]
