@@ -67,7 +67,7 @@ def initialize_database():
 
             query="""DROP TABLE IF EXISTS HASTA"""
             cursor.execute(query)
-            
+
             query=""" CREATE TABLE HASTA(
             hasta_no INTEGER PRIMARY KEY,
             isim VARCHAR(15),
@@ -93,7 +93,7 @@ def initialize_database():
 
             query="""DROP TABLE IF EXISTS ODA"""
             cursor.execute(query)
-            
+
             query = """ CREATE TABLE ODA(
             oda_id INTEGER,
             oda_kap INTEGER,
@@ -107,7 +107,7 @@ def initialize_database():
 
             query="""DROP TABLE IF EXISTS DOKTOR"""
             cursor.execute(query)
-            
+
             query = """ CREATE TABLE DOKTOR(
             doktor_ad VARCHAR,
             doktor_brans VARCHAR,
@@ -120,7 +120,7 @@ def initialize_database():
             FOREIGN KEY (doktor_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
-            
+
             query="""DROP TABLE IF EXISTS RANDEVU"""
             cursor.execute(query)
 
@@ -135,7 +135,7 @@ def initialize_database():
             FOREIGN KEY (doktor_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
-            
+
             query="""DROP TABLE IF EXISTS AMELIYATHANE"""
             cursor.execute(query)
 
@@ -149,7 +149,7 @@ def initialize_database():
             FOREIGN KEY(hasta_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
-            
+
             query="""DROP TABLE IF EXISTS TAHLIL"""
             cursor.execute(query)
 
@@ -162,7 +162,7 @@ def initialize_database():
             FOREIGN KEY(hasta_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
-            
+
             query="""DROP TABLE IF EXISTS HEMSIRE"""
             cursor.execute(query)
 
@@ -179,6 +179,7 @@ def initialize_database():
 
         connection.commit()
         return redirect(url_for('home_page'))
+
 @app.route('/Signedup',methods=['GET','POST'])
 def Signedup():
     if request.method == 'POST' :
@@ -194,11 +195,11 @@ def Signedup():
             cursor=connection.cursor()
 
             cursor.execute("""INSERT INTO USERD(userid,password,TYPE) VALUES ("""+userid+""","""+password+""",1)""")
-            
+
             #cursor.execute("""INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES ("""+userid+""","""+name+""","""+tc+""","""+telno+""")""")
             cursor.execute("""INSERT INTO HASTA(hasta_no,isim,tc,telefon) VALUES (%s,%s,%s,%s)""",(userid,name,tc,telno))
-   
-                           
+
+
             connection.commit()
         #return "name%s"% name
         return redirect(url_for('home_page'))
@@ -216,7 +217,7 @@ def counter_page():
         query = "UPDATE COUNTER SET N = N + 1"
         cursor.execute(query)
         connection.commit()
-        
+
         query= "SELECT N FROM COUNTER"
         cursor.execute(query)
         count = cursor.fetchone()[0]
@@ -233,7 +234,7 @@ if __name__ == '__main__':
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         app.config['dsn'] = """user='vagrant' password='vagrant'
-                               host='localhost' port=5432 dbname='itucsdb'"""
+                               host='itucsdb1719.mybluemix.net' port=5432 dbname='itucsdb'"""
 
     app.run(host='0.0.0.0', port=port, debug=debug)
 #itucsdb1719.mybluemix.net
