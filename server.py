@@ -74,7 +74,7 @@ def initialize_database():
             YAS INTEGER,
             tc VARCHAR(11) NOT NULL,
             telefon VARCHAR(12),
-            FOREIGN KEY (hasta_no) REFERENCES USERD
+            FOREIGN KEY (hasta_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
 
