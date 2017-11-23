@@ -10,9 +10,12 @@ from flask import render_template
 from flask.helpers import url_for
 from flask import request
 from jinja2.runtime import to_string
+from flask.ext.sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 
 
+db= SQLAlchemy()
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
     parsed = json.loads(vcap_services)
@@ -30,16 +33,12 @@ def home_page():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('user_page'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user=user.query.get(form.user.data)
+        password = user.query.get(form.user.password)
+        if user:
+            if user == userid and passwordk
     return render_template('login.html', error=error)
 
 @app.route('/initdb')
