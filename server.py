@@ -39,7 +39,7 @@ def login():
         else:
             session['logged_in'] = True
             flash('You were logged in')
-            return redirect(url_for('show_entries'))
+            return redirect(url_for('user_page'))
     return render_template('login.html', error=error)
 
 @app.route('/initdb')
@@ -74,7 +74,7 @@ def initialize_database():
             YAS INTEGER,
             tc VARCHAR(11) NOT NULL,
             telefon VARCHAR(12),
-            FOREIGN KEY (hasta_no) REFERENCES USERD
+            FOREIGN KEY (hasta_no) REFERENCES USERD (userid)
             )"""
             cursor.execute(query)
 
